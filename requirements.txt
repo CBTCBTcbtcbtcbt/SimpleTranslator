@@ -1,0 +1,4 @@
+easyocr
+keyboard
+Pillow
+numpy
