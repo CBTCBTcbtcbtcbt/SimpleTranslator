@@ -15,14 +15,20 @@ class ScreenshotOCR:
         """轮询检测剪贴板中的图像"""
         self.clipboard_check_running = True
         print("  - 等待截图完成...")
+        last_image_bytes = None
+        initial_image = ImageGrab.grabclipboard()
+        if isinstance(initial_image, Image.Image):
+            last_image_bytes = initial_image.tobytes()
         
         while self.clipboard_check_running:
             try:
                 time.sleep(0.1)
                 image = ImageGrab.grabclipboard()
-                
                 if isinstance(image, Image.Image):
-                    self.clipboard_check_running = False
+                    current_bytes = image.tobytes()
+                    if current_bytes == last_image_bytes:
+                        continue
+                    
                     print("  - 检测到截图！")
                     
                     # 执行OCR
@@ -41,6 +47,10 @@ class ScreenshotOCR:
                     else:
                         print("未识别到文字")
                     print("-" * 50)
+                    print("\n按 Ctrl+Shift+S 开始下一次截图")
+                    
+                    # 停止轮询
+                    self.clipboard_check_running = False
                     break
                     
             except Exception:
@@ -48,9 +58,10 @@ class ScreenshotOCR:
     
     def capture_and_ocr(self):
         """触发Windows截图工具并检测剪贴板"""
+        keyboard.press_and_release('win+shift+s')
         try:
             # 触发Windows截图快捷键
-            keyboard.press_and_release('win+shift+s')
+            
             print("已触发截图工具，请选择截图区域...")
             # 启动剪贴板检测线程
             thread = threading.Thread(target=self.check_clipboard_loop)
@@ -61,8 +72,9 @@ class ScreenshotOCR:
     
     def start(self):
         """启动监听"""
+        print("\n提示：在Windows上需要管理员权限才能全局监听键盘")
         print("按 Ctrl+Shift+S 开始截图")
-        keyboard.add_hotkey('ctrl+shift+s', self.capture_and_ocr)
+        keyboard.add_hotkey('s+c', self.capture_and_ocr)
         keyboard.wait()
 
 if __name__ == "__main__":
