@@ -13,6 +13,7 @@ class TranslationPopup(QDialog):
     """翻译结果弹窗 - 使用 Fluent Design"""
     def __init__(self, text, parent=None):
         super().__init__(parent)
+        self.auto_close=False
         self.text = text
         self.setWindowTitle("翻译结果")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -60,10 +61,10 @@ class TranslationPopup(QDialog):
         
         calculated_time = len(self.text) * char_time
         display_time = max(min_time, min(calculated_time, max_time))
-        
-        # 设置定时器自动关闭
-        QTimer.singleShot(display_time, self.close)
-        print(f"弹窗将在 {display_time/1000:.1f} 秒后自动关闭")
+        if self.auto_close:
+            # 设置定时器自动关闭
+            QTimer.singleShot(display_time, self.close)
+            print(f"弹窗将在 {display_time/1000:.1f} 秒后自动关闭")
 
 class SignalBridge(QObject):
     """信号桥接器，用于跨线程通信"""
