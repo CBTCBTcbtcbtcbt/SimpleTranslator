@@ -53,7 +53,7 @@ class TranslationPopup(QDialog):
     def calculate_and_set_timer(self):
         """根据文字量计算显示时间并设置自动关闭定时器"""
         # 每个字符显示 150 毫秒
-        char_time = 150
+        char_time = 200
         # 最小显示时间 3 秒，最大 15 秒
         min_time = 1000
         max_time = 15000
@@ -96,33 +96,36 @@ def run_keyboard_listener():
     keyboard.wait()
 
 if __name__ == "__main__":
-    # 初始化 QApplication
-    app = QApplication(sys.argv)
-    
-    # 设置主题（自动检测系统主题）
-    if isDarkTheme():
-        setTheme(Theme.DARK)
-    else:
-        setTheme(Theme.LIGHT)
-    
-    # 创建信号桥接器并连接
-    signal_bridge = SignalBridge()
-    signal_bridge.show_popup_signal.connect(show_popup_in_main_thread)
-    
-    # 创建翻译器和 OCR
-    translator = ClipboardTranslator(callback=handle_translation)
-    ocr = ScreenshotOCR()
-    translator.start()
-    ocr.start()
-    
-    # 在后台线程中运行 keyboard 监听
-    keyboard_thread = threading.Thread(target=run_keyboard_listener, daemon=True)
-    keyboard_thread.start()
-    
-    print("\n=== 简易翻译器已启动 ===")
-    print("按 T+R 翻译剪贴板内容")
-    print("按 S+C 开始截图识别")
-    print("程序将持续运行，等待您的操作...\n")
-    
-    # 运行 Qt 事件循环
-    sys.exit(app.exec_())
+    while(1):
+        # 初始化 QApplication
+        app = QApplication(sys.argv)
+        app.setQuitOnLastWindowClosed(False)
+        # 设置主题（自动检测系统主题）
+        if isDarkTheme():
+            setTheme(Theme.DARK)
+        else:
+            setTheme(Theme.LIGHT)
+        
+        # 创建信号桥接器并连接
+        signal_bridge = SignalBridge()
+        signal_bridge.show_popup_signal.connect(show_popup_in_main_thread)
+        
+        # 创建翻译器和 OCR
+        translator = ClipboardTranslator(callback=handle_translation)
+        ocr = ScreenshotOCR()
+        translator.start()
+        ocr.start()
+        
+        # 在后台线程中运行 keyboard 监听
+        keyboard_thread = threading.Thread(target=run_keyboard_listener, daemon=True)
+        keyboard_thread.start()
+
+
+        print("\n=== 简易翻译器已启动 ===")
+        print("按 T+R 翻译剪贴板内容")
+        print("按 S+C 开始截图识别")
+        print("程序将持续运行，等待您的操作...\n")
+        
+        # 运行 Qt 事件循环
+        sys.exit(app.exec_())
+        
