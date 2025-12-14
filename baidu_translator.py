@@ -1,13 +1,18 @@
 import hashlib
 import random
 import requests
-from config import BAIDU_TRANSLATE_CONFIG
+import json
+import os
 
 class BaiduTranslator:
     def __init__(self):
-        self.app_id = BAIDU_TRANSLATE_CONFIG['app_id']
-        self.secret_key = BAIDU_TRANSLATE_CONFIG['secret_key']
-        self.api_url = BAIDU_TRANSLATE_CONFIG['api_url']
+        config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        self.app_id = config['baidu_translate']['app_id']
+        self.secret_key = config['baidu_translate']['secret_key']
+        self.api_url = config['baidu_translate']['api_url']
     
     def translate(self, text, from_lang='auto', to_lang='zh'):
         """翻译文本"""

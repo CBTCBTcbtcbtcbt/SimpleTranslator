@@ -4,6 +4,8 @@ import threading
 import time
 from PIL import ImageGrab, Image
 import numpy as np
+import pyperclip
+from clipboard_translator import ClipboardTranslator
 
 class ScreenshotOCR:
     def __init__(self):
@@ -40,10 +42,17 @@ class ScreenshotOCR:
                     print("\n识别结果：")
                     print("-" * 50)
                     if results:
+                        text_list = []
                         for detection in results:
                             text = detection[1]
                             confidence = detection[2]
                             print(f"{text} (置信度: {confidence:.2f})")
+                            text_list.append(text)
+                        
+                        # 将识别的文字拼接并放入剪贴板
+                        combined_text = ' '.join(text_list)
+                        pyperclip.copy(combined_text)
+                        print(f"\n已复制到剪贴板: {combined_text}")
                     else:
                         print("未识别到文字")
                     print("-" * 50)
@@ -60,8 +69,6 @@ class ScreenshotOCR:
         """触发Windows截图工具并检测剪贴板"""
         keyboard.press_and_release('win+shift+s')
         try:
-            # 触发Windows截图快捷键
-            
             print("已触发截图工具，请选择截图区域...")
             # 启动剪贴板检测线程
             thread = threading.Thread(target=self.check_clipboard_loop)
@@ -72,11 +79,17 @@ class ScreenshotOCR:
     
     def start(self):
         """启动监听"""
-        print("\n提示：在Windows上需要管理员权限才能全局监听键盘")
         print("按 Ctrl+Shift+S 开始截图")
         keyboard.add_hotkey('s+c', self.capture_and_ocr)
-        keyboard.wait()
 
 if __name__ == "__main__":
-    app = ScreenshotOCR()
-    app.start()
+    print("\n提示：在Windows上需要管理员权限才能全局监听键盘")
+    
+    # 创建两个独立的模块实例
+    ocr_app = ScreenshotOCR()
+  
+    # 分别启动两个模块
+    ocr_app.start()
+
+    # 等待键盘事件
+    keyboard.wait()

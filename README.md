@@ -26,12 +26,14 @@ pip install -r requirements.txt
 
 2. 获取APP ID和密钥
 
-3. 编辑 `config.py` 文件，填入你的配置：
-```python
-BAIDU_TRANSLATE_CONFIG = {
-    'app_id': 'YOUR_APP_ID',  # 替换为你的APP ID
-    'secret_key': 'YOUR_SECRET_KEY',  # 替换为你的密钥
-    'api_url': 'https://fanyi-api.baidu.com/api/trans/vip/translate'
+3. 编辑 `config.json` 文件，填入你的配置：
+```json
+{
+  "baidu_translate": {
+    "app_id": "YOUR_APP_ID",
+    "secret_key": "YOUR_SECRET_KEY",
+    "api_url": "https://fanyi-api.baidu.com/api/trans/vip/translate"
+  }
 }
 ```
 
@@ -49,11 +51,11 @@ python screenshot_ocr.py
    - 截图完成后，程序会自动检测剪贴板并识别文字，结果显示在控制台
 
 4. **翻译功能**：按 `T+R` 翻译剪贴板内容
-   - 确保剪贴板中有文字内容
+   - 确保剪贴板中有文字内容（可以是OCR识别后的文字，也可以是任何复制的文字）
    - 程序会调用百度翻译API进行翻译
    - 翻译结果显示在控制台
 
-5. 可以重复使用快捷键进行多次操作
+5. 两个功能完全独立，可以单独使用或配合使用
 
 6. 按 `Ctrl+C` 或关闭窗口退出程序
 
@@ -67,13 +69,20 @@ python screenshot_ocr.py
 
 ```
 SimpleTranslator/
-├── screenshot_ocr.py          # 主程序
+├── screenshot_ocr.py          # 主程序（整合OCR和翻译模块）
 ├── baidu_translator.py        # 百度翻译API类
-├── clipboard_translator.py    # 剪贴板翻译管理类
-├── config.py                  # 配置文件（百度API信息）
+├── clipboard_translator.py    # 剪贴板翻译模块（独立）
+├── config.json                # 配置文件（百度API信息）
 ├── requirements.txt           # 依赖列表
 └── README.md                  # 说明文档
 ```
+
+## 设计特点
+
+- **低耦合架构**：OCR模块和翻译模块完全独立，互不依赖
+- **OOP设计**：每个类职责单一，易于维护和扩展
+- **配置分离**：使用JSON配置文件，便于修改和管理
+- **独立快捷键**：每个模块有自己的快捷键监听，互不干扰
 
 ## 依赖库
 

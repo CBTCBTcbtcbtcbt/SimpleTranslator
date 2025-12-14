@@ -4,7 +4,7 @@ net session >nul 2>&1
 if %errorLevel% == 0 (
     echo 已获得管理员权限，正在启动程序...
     cd /d "%~dp0"
-    python screenshot_ocr.py
+    .venv\Scripts\python.exe screenshot_ocr.py
     pause
 ) else (
     echo 请求管理员权限...
