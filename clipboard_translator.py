@@ -3,8 +3,9 @@ import keyboard
 from baidu_translator import BaiduTranslator
 
 class ClipboardTranslator:
-    def __init__(self):
+    def __init__(self,callback=None):
         self.translator = BaiduTranslator()
+        self.callback = callback
         print("翻译器已初始化")
     
     def translate_clipboard(self):
@@ -21,6 +22,9 @@ class ClipboardTranslator:
         result = self.translator.translate(text)
         print(f"译文: {result}")
         print("-" * 50)
+
+        if self.callback:
+            self.callback(result)
     
     def start(self):
         """启动翻译快捷键监听"""

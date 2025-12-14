@@ -56,7 +56,7 @@ class ScreenshotOCR:
                     else:
                         print("未识别到文字")
                     print("-" * 50)
-                    print("\n按 Ctrl+Shift+S 开始下一次截图")
+                    print("\n按 S+C 开始下一次截图")
                     
                     # 停止轮询
                     self.clipboard_check_running = False
@@ -79,7 +79,7 @@ class ScreenshotOCR:
     
     def start(self):
         """启动监听"""
-        print("按 Ctrl+Shift+S 开始截图")
+        print("按 S+C 开始截图")
         keyboard.add_hotkey('s+c', self.capture_and_ocr)
 
 if __name__ == "__main__":

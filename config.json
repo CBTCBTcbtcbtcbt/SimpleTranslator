@@ -1,7 +1,8 @@
 {
   "baidu_translate": {
-    "app_id": "YOUR_APP_ID",
-    "secret_key": "YOUR_SECRET_KEY",
-    "api_url": "https://fanyi-api.baidu.com/api/trans/vip/translate"
+    "api_key": "qDPka3AMHny6vjNPCTrSJsg0",
+    "secret_key": "35uMMgBuLlguG2w2TPKAXRFjETaRv6X1",
+    "token_url": "https://aip.baidubce.com/oauth/2.0/token",
+    "api_url": "https://aip.baidubce.com/rpc/2.0/mt/texttrans/v1"
   }
 }
